@@ -14,7 +14,7 @@ Route::get('/signin', function () {
     return Redirect::to('http://api_gateway.local:81/');
 })->name('signin');
 
-Route::post('signin', [AuthenticatedSessionController::class, 'store']);
+Route::post('/signin', [AuthenticatedSessionController::class, 'store']);
 
 Route::get('/validate', [ValidateController::class, 'validate'])->name('validate');
 
