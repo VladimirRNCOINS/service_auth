@@ -9,7 +9,7 @@
         @endif
     </div>
     <div>
-        <form method="POST" action="{{ 'http://api_gateway.local:81/login/' }}">
+        <form method="POST" action="{{ 'http://api_gateway.local:81/signin/' }}">
             @csrf
 
             <!-- Email Address -->

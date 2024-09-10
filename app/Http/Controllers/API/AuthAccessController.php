@@ -50,6 +50,7 @@ class AuthAccessController extends Controller
             return false;
         }
         $b_token_arr = explode('|', $b_token);
+        return $b_token_arr[0];
         if (isset($b_token_arr[0])) {
             DB::update("UPDATE sessions SET user_id = ? WHERE user_id = ?", [NULL, $b_token_arr[0]]);
             DB::delete("DELETE FROM personal_access_tokens WHERE tokenable_id = ?", [$b_token_arr[0]]);

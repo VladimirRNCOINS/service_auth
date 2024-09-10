@@ -5,10 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ValidateController;
 use App\Http\Controllers\LogoutController;
 use Illuminate\Support\Facades\Redirect;
-
-/*Route::get('/', function () {
-    return view('welcome');
-});*/
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/signin', function () {
     if (!Auth::user()) {
@@ -16,6 +13,8 @@ Route::get('/signin', function () {
     }
     return Redirect::to('http://api_gateway.local:81/');
 })->name('signin');
+
+Route::post('signin', [AuthenticatedSessionController::class, 'store']);
 
 Route::get('/validate', [ValidateController::class, 'validate'])->name('validate');
 
