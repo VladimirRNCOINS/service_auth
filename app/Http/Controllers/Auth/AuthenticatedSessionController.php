@@ -12,7 +12,6 @@ use App\Models\User;
 use Symfony\Component\HttpFoundation\Response;
 use DB;
 use Route;
-use App\Resources\Logger;
 use Cookie;
 
 class AuthenticatedSessionController extends Controller
