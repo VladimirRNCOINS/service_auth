@@ -7,17 +7,21 @@ use Auth;
 use DB;
 use Illuminate\Support\Facades\Crypt;
 use App\Resources\Logger;
+use Cookie;
 
 class ValidateController extends Controller
 {
-    public function validate (Request $request) {
-        /*$req_service_auth_sessions = $request->cookie('service_auth_session');
-        if (isset($req_service_auth_sessions)) {
-            $service_auth_session = Crypt::decryptString($req_service_auth_sessions);
-            Logger::log($req_service_auth_sessions);
-        }*/
-        
+    public function validate (Request $request) 
+    {
         if (!Auth::user()) {
+            $xut = Cookie::get('x-user-token');
+            if (isset($xut)) {
+                $cokie_token = DB::select("SELECT token_id FROM real_access_tokens WHERE cookie_user_token = ?", [$xut]);
+                if ($cokie_token && $cokie_token[0] && $cokie_token[0]->token_id) {
+                    DB::delete("DELETE FROM personal_access_tokens WHERE id = ?", [$cokie_token[0]->token_id]);
+                }
+            }
+            
             return response('Unauthorized', 401)->header('Content-Type', 'text/plain');
         }
 

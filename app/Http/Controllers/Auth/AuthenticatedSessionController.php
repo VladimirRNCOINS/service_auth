@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use DB;
 use Route;
 use App\Resources\Logger;
+use Cookie;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -42,9 +43,12 @@ class AuthenticatedSessionController extends Controller
         $token_id = DB::select("SELECT max(id) AS t_id FROM personal_access_tokens WHERE tokenable_id = ?",[$user->id]);
 
         if ($token_id && $token_id[0] && $token_id[0]->t_id) {
-            DB::insert("INSERT INTO real_access_tokens (real_token, token_id) VALUES (?, ?)", [$token, $token_id[0]->t_id]);
 
-            return redirect()->back();
+            $uid = uniqid("flkjz-", true);
+            
+            DB::insert("INSERT INTO real_access_tokens (real_token, token_id, cookie_user_token) VALUES (?, ?, ?)", [$token, $token_id[0]->t_id, $uid]);
+
+            return redirect()->back()->withCookie(Cookie::make('x-user-token', $uid));
         }
 
         return redirect()->route('signin');
